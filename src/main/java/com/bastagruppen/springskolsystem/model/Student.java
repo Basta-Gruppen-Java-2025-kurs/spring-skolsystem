@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
-import static com.bastagruppen.springskolsystem.util.RegexUtil.emailMatcher;
 import static lombok.AccessLevel.PRIVATE;
 
 @SuperBuilder
@@ -40,3 +39,4 @@ public final class Student extends Entity {
 
         this.age = age;
     }
+}

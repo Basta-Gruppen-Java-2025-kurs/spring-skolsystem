@@ -1,12 +1,21 @@
 package com.bastagruppen.springskolsystem.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Course {
+@Getter
+public class Course extends Entity {
+    //region getters and setters
+    @Setter
     private long id;
+    @Setter
     private String title;
+    @Setter
     private String teacher;
+    @Setter
     private int maxStudents;
     private final List<Student> students = new ArrayList<>(); // do we actually need this?
 
@@ -20,41 +29,4 @@ public class Course {
     public Course() {
     }
 
-    //region getters and setters
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getTeacher() {
-        return teacher;
-    }
-
-    public void setTeacher(String teacher) {
-        this.teacher = teacher;
-    }
-
-    public int getMaxStudents() {
-        return maxStudents;
-    }
-
-    public void setMaxStudents(int maxStudents) {
-        this.maxStudents = maxStudents;
-    }
-
-    public List<Student> getStudents() {
-        return students;
-    }
-    //endregion
 }
