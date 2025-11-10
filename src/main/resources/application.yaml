@@ -1,3 +1,11 @@
 spring:
   application:
     name: springskolsystem
+
+  jackson:
+    time-zone: Europe/Stockholm
+    date-format: yyyy-MM-dd HH:mm:ss
+    deserialization:
+      adjust-dates-to-context-time-zone: true
+    serialization:
+      indent-output: true
