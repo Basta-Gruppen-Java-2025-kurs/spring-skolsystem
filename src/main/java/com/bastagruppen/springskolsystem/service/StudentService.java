@@ -30,6 +30,13 @@ public class StudentService {
         return studentRepository.findStudentByEmail(email).orElseThrow(StudentNotFoundException::new);
     }
 
+    public Set<StudentDTO> getAllStudents() {
+        return studentRepository.findAll()
+                .stream()
+                .map(StudentMapper::toDTO)
+                .collect(toUnmodifiableSet());
+    }
+
     public Student registerStudent(final StudentDTO studentDTO) {
         final Student student = register(
                 studentDTO.name(),
@@ -37,12 +44,5 @@ public class StudentService {
                 studentDTO.email());
 
         return studentRepository.save(student);
-    }
-
-    public Set<StudentDTO> getAllStudents() {
-        return studentRepository.findAll()
-                .stream()
-                .map(StudentMapper::toDTO)
-                .collect(toUnmodifiableSet());
     }
 }

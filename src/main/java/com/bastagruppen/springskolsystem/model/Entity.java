@@ -13,6 +13,7 @@ public abstract class Entity {
 
     protected final UUID id;
 
+    @SuppressWarnings("unused")
     protected Entity() {
         this.id = randomUUID();
     }
