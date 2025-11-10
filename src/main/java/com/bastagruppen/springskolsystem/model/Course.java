@@ -1,4 +1,4 @@
-package main.java.com.bastagruppen.springskolsystem.model;
+package com.bastagruppen.springskolsystem.model;
 
 import java.util.ArrayList;
 import java.util.List;
