@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static java.util.Objects.isNull;
 import static java.util.Optional.ofNullable;
 
 public class InMemoryRepository<T extends Entity> {
@@ -23,15 +24,18 @@ public class InMemoryRepository<T extends Entity> {
         return entity;
     }
 
-    public Optional<T> findById(UUID id) {
-        return ofNullable(records.get(id));
-    }
-
     public Collection<T> findAll() {
         return records.values();
     }
 
-    public void deleteById(UUID id) {
-        records.remove(id);
+    public Optional<T> findById(UUID id) {
+        return ofNullable(records.get(id));
+    }
+
+    public void delete(T entity) {
+        if (isNull(entity))
+            throw new NullPointerException("Entity is null");
+
+        records.remove(entity.getId());
     }
 }

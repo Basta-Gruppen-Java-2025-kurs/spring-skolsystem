@@ -13,10 +13,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.Set;
+import java.util.UUID;
 
 import static com.bastagruppen.springskolsystem.mapper.StudentMapper.toDTO;
-import static org.springframework.http.ResponseEntity.created;
-import static org.springframework.http.ResponseEntity.ok;
+import static org.springframework.http.ResponseEntity.*;
 
 @Validated
 @RequiredArgsConstructor
@@ -34,7 +34,7 @@ public class StudentController {
 
     @GetMapping(params = "email")
     public ResponseEntity<StudentDTO> getStudentByEmail(@RequestParam @Email String email) {
-        Student student = studentService.getStudentByEmail(email);
+        final Student student = studentService.getStudentByEmail(email);
         return ok(toDTO(student));
     }
 
@@ -47,5 +47,11 @@ public class StudentController {
                 .toUri();
 
         return created(location).body(toDTO(student));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteStudent(@PathVariable UUID id) {
+        studentService.deleteStudent(id);
+        return noContent().build();
     }
 }

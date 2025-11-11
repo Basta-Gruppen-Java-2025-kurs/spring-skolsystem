@@ -9,10 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.bastagruppen</groupId>
-	<artifactId>springskolsystem</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>Spring Skolsystem</name>
-	<description>Spring Boot School System</description>
+    <artifactId>school-system-api</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+	<name>School System API</name>
 
     <properties>
         <java.version>21</java.version>

@@ -45,4 +45,9 @@ public class StudentService {
 
         return studentRepository.save(student);
     }
+
+    public void deleteStudent(final UUID id) {
+        final Student student = getStudentById(id);
+        studentRepository.delete(student);
+    }
 }

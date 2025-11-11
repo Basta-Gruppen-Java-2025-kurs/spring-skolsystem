@@ -38,7 +38,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                                                                   @NonNull HttpStatusCode status,
                                                                   @NonNull WebRequest request) {
         log.error(ex.getMessage(), ex);
-
         final Map<String, String> fieldErrors = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
