@@ -38,6 +38,19 @@ public class StudentController {
         return ok(toDTO(student));
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<Set<StudentDTO>> getStudentsByName(@RequestParam String name) {
+        Set<StudentDTO> students = studentService.findStudentsByName(name);
+        return ResponseEntity.ok(students);
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<Set<StudentDTO>> getStudentsByAgeRange(@RequestParam int minAge,
+                                                                 @RequestParam int maxAge) {
+        Set<StudentDTO> students = studentService.findStudentsByAgeRange(minAge, maxAge);
+        return ResponseEntity.ok(students);
+    }
+
     @PostMapping
     public ResponseEntity<StudentDTO> createStudent(@Validated(ICreate.class) @RequestBody StudentDTO dto) {
         final Student student = studentService.registerStudent(dto);
