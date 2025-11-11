@@ -1,32 +1,24 @@
 package com.bastagruppen.springskolsystem.model;
 
-import lombok.Getter;
-import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Getter
-public class Course extends Entity {
-    //region getters and setters
-    @Setter
+@Setter
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@Entity
+public class Course {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Setter
+    @Column(nullable = false)
     private String title;
-    @Setter
+    @Column(nullable = false)
     private String teacher;
-    @Setter
+    @Column(nullable = false)
     private int maxStudents;
-    private final List<Student> students = new ArrayList<>(); // do we actually need this?
-
-    public Course(long id, String title, String teacher, int maxStudents) {
-        this.id = id;
-        this.title = title;
-        this.teacher = teacher;
-        this.maxStudents = maxStudents;
-    }
-
-    public Course() {
-    }
+/*    @Setter(AccessLevel.NONE)
+    private final List<Student> students = new ArrayList<>(); // do we actually need this?*/
 
 }
