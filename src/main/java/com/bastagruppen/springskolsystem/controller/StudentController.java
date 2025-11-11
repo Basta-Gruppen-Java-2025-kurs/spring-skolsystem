@@ -34,7 +34,7 @@ public class StudentController {
 
     @GetMapping(params = "email")
     public ResponseEntity<StudentDTO> getStudentByEmail(@RequestParam @Email String email) {
-        final Student student = studentService.getStudentByEmail(email);
+        final Student student = studentService.findStudentByEmail(email);
         return ok(toDTO(student));
     }
 
