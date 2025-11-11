@@ -1,18 +1,27 @@
 package com.bastagruppen.springskolsystem.repository;
 
 import com.bastagruppen.springskolsystem.model.Student;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.UUID;
 
-@Slf4j
 @Repository
-public class StudentRepository extends InMemoryRepository<Student> {
+public interface StudentRepository extends JpaRepository<Student, UUID> {
 
-    public Optional<Student> findStudentByEmail(final String email) {
-        return findAll().stream()
-                .filter(student -> student.getEmail().equals(email))
-                .findFirst();
-    }
+    Optional<Student> findByEmail(String email);
+
+    @Modifying
+    @Query("""
+            UPDATE Student s
+            SET s.age = :newAge
+            WHERE s.id = :id
+                AND :newAge > s.age
+                AND :newAge <= 125
+            """)
+    int updateAge(@Param("id") Long id, @Param("newAge") int newAge);
 }
