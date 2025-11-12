@@ -1,6 +1,7 @@
 package com.bastagruppen.springskolsystem.model;
 
 import java.util.List;
+import java.util.UUID;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
@@ -11,11 +12,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 
-
 @Getter
 @FieldDefaults(level = PRIVATE)
 @AllArgsConstructor(access = PRIVATE)
-public final class Course extends Entity{
+public final class Course{
+
+    protected final UUID id = java.util.UUID.randomUUID();
 
     @NotBlank(message = "⚠️ Title is required!")
     @Size(min = 3, max = 255, message = "⚠️ Title must be 3-255 characters!")
@@ -32,6 +34,7 @@ public final class Course extends Entity{
     // TODO - Add lombok validation constraints!
     final List<Student> enrolledStudents;
 
+    public UUID getId(){return id;}
     public String getTitle(){return title;}
     public String getTeacher(){return teacher;}
     public Integer getMaxStudents(){return maxStudents;}
