@@ -34,8 +34,21 @@ public class StudentController {
 
     @GetMapping(params = "email")
     public ResponseEntity<StudentDTO> getStudentByEmail(@RequestParam @Email String email) {
-        final Student student = studentService.getStudentByEmail(email);
+        final Student student = studentService.findStudentByEmail(email);
         return ok(toDTO(student));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Set<StudentDTO>> getStudentsByName(@RequestParam String name) {
+        Set<StudentDTO> students = studentService.findStudentsByName(name);
+        return ResponseEntity.ok(students);
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<Set<StudentDTO>> getStudentsByAgeRange(@RequestParam int minAge,
+                                                                 @RequestParam int maxAge) {
+        Set<StudentDTO> students = studentService.findStudentsByAgeRange(minAge, maxAge);
+        return ResponseEntity.ok(students);
     }
 
     @PostMapping
