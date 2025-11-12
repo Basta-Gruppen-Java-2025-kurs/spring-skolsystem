@@ -30,6 +30,20 @@ public class StudentService {
         return studentRepository.findByEmail(email).orElseThrow(StudentNotFoundException::new);
     }
 
+    public Set<StudentDTO> findStudentsByName(String name) {
+        return studentRepository.findByNameContainingIgnoreCase(name)
+                .stream()
+                .map(StudentMapper::toDTO)
+                .collect(toUnmodifiableSet());
+    }
+
+    public Set<StudentDTO> findStudentsByAgeRange(int minAge, int maxAge) {
+        return studentRepository.findByAgeBetween(minAge, maxAge)
+                .stream()
+                .map(StudentMapper::toDTO)
+                .collect(toUnmodifiableSet());
+    }
+
     public Set<StudentDTO> getAllStudents() {
         return studentRepository.findAll()
                 .stream()
