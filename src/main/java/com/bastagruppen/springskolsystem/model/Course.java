@@ -3,6 +3,7 @@ package com.bastagruppen.springskolsystem.model;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.persistence.Entity;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -10,11 +11,15 @@ import jakarta.validation.constraints.Size;
 import static lombok.AccessLevel.PRIVATE;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
 @Getter
+@Setter
 @FieldDefaults(level = PRIVATE)
 @AllArgsConstructor(access = PRIVATE)
+@Entity
+
 public final class Course{
 
     protected final UUID id = java.util.UUID.randomUUID();

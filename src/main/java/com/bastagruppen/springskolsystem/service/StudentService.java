@@ -22,12 +22,26 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
 
-    public Student getStudentById(final UUID studentId) {
+    public Student findStudentById(final UUID studentId) {
         return studentRepository.findById(studentId).orElseThrow(StudentNotFoundException::new);
     }
 
-    public Student getStudentByEmail(final String email) {
-        return studentRepository.findStudentByEmail(email).orElseThrow(StudentNotFoundException::new);
+    public Student findStudentByEmail(final String email) {
+        return studentRepository.findByEmail(email).orElseThrow(StudentNotFoundException::new);
+    }
+
+    public Set<StudentDTO> findStudentsByName(String name) {
+        return studentRepository.findByNameContainingIgnoreCase(name)
+                .stream()
+                .map(StudentMapper::toDTO)
+                .collect(toUnmodifiableSet());
+    }
+
+    public Set<StudentDTO> findStudentsByAgeRange(int minAge, int maxAge) {
+        return studentRepository.findByAgeBetween(minAge, maxAge)
+                .stream()
+                .map(StudentMapper::toDTO)
+                .collect(toUnmodifiableSet());
     }
 
     public Set<StudentDTO> getAllStudents() {
@@ -47,7 +61,7 @@ public class StudentService {
     }
 
     public void deleteStudent(final UUID id) {
-        final Student student = getStudentById(id);
+        final Student student = findStudentById(id);
         studentRepository.delete(student);
     }
 }

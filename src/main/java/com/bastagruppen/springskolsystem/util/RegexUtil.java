@@ -16,6 +16,7 @@ public final class RegexUtil {
                 .matches();
     }
 
+    // TODO: Correct E-mail validation
     public static boolean emailMatcher(String email) {
         return patternMatcher(email, EMAIL_PATTERN);
     }
