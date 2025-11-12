@@ -1,6 +1,5 @@
 package com.bastagruppen.springskolsystem.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.validation.constraints.Max;
@@ -11,14 +10,12 @@ import static lombok.AccessLevel.PRIVATE;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.SuperBuilder;
 
 
-@SuperBuilder
 @Getter
 @FieldDefaults(level = PRIVATE)
 @AllArgsConstructor(access = PRIVATE)
-public final class Course {
+public final class Course extends Entity{
 
     @NotBlank(message = "⚠️ Title is required!")
     @Size(min = 3, max = 255, message = "⚠️ Title must be 3-255 characters!")
@@ -34,13 +31,19 @@ public final class Course {
 
     // TODO - Add lombok validation constraints!
     final List<Student> enrolledStudents;
+
+    public String getTitle(){return title;}
+    public String getTeacher(){return teacher;}
+    public Integer getMaxStudents(){return maxStudents;}
+    public List<Student> getEnrolledStudents(){return enrolledStudents;}
     
     public static Course create(
         final String title,
         final String teacher,
-        final Integer maxStudents
+        final Integer maxStudents,
+        final List<Student> enrolledStudents
     ){
-        return new Course(title, teacher, maxStudents, new ArrayList<>());
+        return new Course(title, teacher, maxStudents, enrolledStudents);
     }
 
     public void updateTeacher(String teacher){
