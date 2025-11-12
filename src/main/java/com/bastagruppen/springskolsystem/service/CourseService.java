@@ -33,12 +33,17 @@ public class CourseService implements CourseServiceInterface{
 
     @Override
     public Course getCourseById(final UUID id){
-        return courseRepository.findById(id).orElseThrow(RuntimeException::new); //TODO - Add custom exception
+        return courseRepository.findById(id)
+            .orElseThrow(RuntimeException::new); //TODO - Add custom exception
     }
 
     @Override
     public Course getCourseByTitle(final String title){
-        return courseRepository.findCourseByTitle(title).orElseThrow(RuntimeException::new);
+        return courseRepository.findAll()
+            .stream()
+            .filter(c -> c.getTitle().equals(title))
+            .findFirst()
+            .orElseThrow(RuntimeException::new);
     }
 
     @Override
