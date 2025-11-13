@@ -1,5 +1,6 @@
 package com.bastagruppen.springskolsystem.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,7 +23,8 @@ public class Course {
     @Column(nullable = false)
     private int maxStudents;
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    private Set<Enrollment> enrollments = new HashSet<>();
+    @JsonIgnore
+    private final Set<Enrollment> enrollments = new HashSet<>();
 /*    @Setter(AccessLevel.NONE)
     private final List<Student> students = new ArrayList<>(); // do we actually need this?*/
 
