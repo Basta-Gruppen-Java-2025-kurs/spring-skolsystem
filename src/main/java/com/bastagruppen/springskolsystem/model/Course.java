@@ -3,6 +3,9 @@ package com.bastagruppen.springskolsystem.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Getter
 @Setter
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
@@ -18,6 +21,8 @@ public class Course {
     private String teacher;
     @Column(nullable = false)
     private int maxStudents;
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    private Set<Enrollment> enrollments = new HashSet<>();
 /*    @Setter(AccessLevel.NONE)
     private final List<Student> students = new ArrayList<>(); // do we actually need this?*/
 
