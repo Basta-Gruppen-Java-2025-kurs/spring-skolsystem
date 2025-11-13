@@ -24,6 +24,8 @@ import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toMap;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.CONFLICT;
+
 
 @Slf4j
 @RequiredArgsConstructor
@@ -56,5 +58,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleStudentNotFoundException(StudentNotFoundException ex, HttpServletRequest request) {
         log.error(ex.getMessage(), ex);
         return ofError(ex.getMessage(), request.getRequestURI(), NOT_FOUND, clock.instant());
+    }
+
+    @ExceptionHandler(IllegalOperationException.class)
+    public ResponseEntity<Object> handleIllegalOperation(IllegalOperationException ex, HttpServletRequest request) {
+        log.error(ex.getMessage(), ex);
+        return ofError(ex.getMessage(), request.getRequestURI(), CONFLICT, clock.instant());
     }
 }
