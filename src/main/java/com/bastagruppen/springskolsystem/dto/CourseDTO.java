@@ -3,14 +3,13 @@ package com.bastagruppen.springskolsystem.dto;
 import java.util.List;
 import java.util.UUID;
 
-import com.bastagruppen.springskolsystem.model.Student;
-import com.bastagruppen.springskolsystem.util.ICreate;
-import com.bastagruppen.springskolsystem.util.IUpdate;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
@@ -18,8 +17,9 @@ import lombok.Builder;
 
 @Builder
 public record CourseDTO (
-    @Null(groups = ICreate.class, message = "⚠️ ID must be null for new courses!")
-    @NotNull(groups = IUpdate.class, message = "⚠️ ID is required for updating course!")
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     UUID id,
 
     @NotBlank(message = "⚠️ Title is required!")
@@ -34,8 +34,8 @@ public record CourseDTO (
     @Max(value = 255, message = "Can only enroll a maximum of 255 students!")
     Integer maxStudents,
 
-    // TODO - Add lombok validation constraints!
-    List<Student> enrolledStudents)
+    @JsonIgnore
+    List<StudentDTO> enrolledStudents)
 {
     @Override
     public boolean equals(Object obj){

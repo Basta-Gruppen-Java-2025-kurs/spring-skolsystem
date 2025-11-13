@@ -20,11 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.bastagruppen.springskolsystem.dto.CourseDTO;
+import com.bastagruppen.springskolsystem.dto.StudentDTO;
 import static com.bastagruppen.springskolsystem.mapper.CourseMapper.fromDTO;
 import static com.bastagruppen.springskolsystem.mapper.CourseMapper.toDTO;
 import com.bastagruppen.springskolsystem.model.Course;
-import com.bastagruppen.springskolsystem.model.Student;
 import com.bastagruppen.springskolsystem.service.CourseService;
+import com.bastagruppen.springskolsystem.util.ICreate;
 
 import lombok.RequiredArgsConstructor;
 
@@ -57,7 +58,8 @@ public class CourseController {
     }
 
     //4️⃣ POST - Create course
-    @PostMapping("/create")
+    @PostMapping
+    @Validated(ICreate.class)
     public ResponseEntity<CourseDTO> createCourse(@RequestBody CourseDTO courseDTO){
         final Course course = courseService.createCourse(fromDTO(courseDTO));
         final URI uriLocation = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -92,15 +94,15 @@ public class CourseController {
 
     //8️⃣ PUT - Enroll a new student
     @PutMapping("/{id}/enroll")
-    public ResponseEntity<CourseDTO> enrollStudent(@PathVariable UUID id, @RequestBody Student student){
-        final Course course = courseService.enrollStudent(id, student);
+    public ResponseEntity<CourseDTO> enrollStudent(@PathVariable UUID id, @RequestBody StudentDTO studentDto){
+        final Course course = courseService.enrollStudent(id, studentDto);
         return ok(toDTO(course));
     }
 
     //9️⃣ PUT - Remove a student from course
     @PutMapping("/{id}/remove")
-    public ResponseEntity<CourseDTO> removeStudent(@PathVariable UUID id, @RequestBody Student student){
-        final Course course = courseService.removeStudent(id, student);
+    public ResponseEntity<CourseDTO> removeStudent(@PathVariable UUID id, @RequestBody StudentDTO studentDto){
+        final Course course = courseService.removeStudent(id, studentDto);
         return ok(toDTO(course));
     }
 }

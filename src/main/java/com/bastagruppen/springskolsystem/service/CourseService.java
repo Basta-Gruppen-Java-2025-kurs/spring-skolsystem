@@ -7,9 +7,9 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.bastagruppen.springskolsystem.dto.CourseDTO;
+import com.bastagruppen.springskolsystem.dto.StudentDTO;
 import com.bastagruppen.springskolsystem.mapper.CourseMapper;
 import com.bastagruppen.springskolsystem.model.Course;
-import com.bastagruppen.springskolsystem.model.Student;
 import com.bastagruppen.springskolsystem.repository.CourseRepository;
 import com.bastagruppen.springskolsystem.service.interfaces.CourseServiceInterface;
 
@@ -87,14 +87,14 @@ public class CourseService implements CourseServiceInterface{
     }
 
     @Override
-    public Course enrollStudent(final UUID id, Student student){
+    public Course enrollStudent(final UUID id, StudentDTO student){
         final Course course = getCourseById(id);
         course.enrollStudent(student);
         return courseRepository.save(course);
     }
 
     @Override
-    public Course removeStudent(final UUID id, Student student){
+    public Course removeStudent(final UUID id, StudentDTO student){
         final Course course = getCourseById(id);
         course.removeStudent(student);
         return courseRepository.save(course);
