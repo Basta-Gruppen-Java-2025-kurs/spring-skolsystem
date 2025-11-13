@@ -1,13 +1,12 @@
 package com.bastagruppen.springskolsystem.controller;
 
-import com.bastagruppen.springskolsystem.model.Enrollment;
+import com.bastagruppen.springskolsystem.dto.EnrollmentRequestDTO;
+import com.bastagruppen.springskolsystem.dto.EnrollmentResponseDTO;
 import com.bastagruppen.springskolsystem.service.EnrollmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,7 +18,12 @@ public class EnrollmentController {
     private final EnrollmentService service;
 
     @GetMapping
-    public ResponseEntity<List<Enrollment>> getAll() {
+    public ResponseEntity<List<EnrollmentResponseDTO>> getAll() {
         return ResponseEntity.ok(service.getAll());
+    }
+
+    @PostMapping
+    public ResponseEntity<EnrollmentResponseDTO> enroll(@Validated @RequestBody EnrollmentRequestDTO requestDTO) {
+        return ResponseEntity.ok(service.enroll(requestDTO.getCourseId(), requestDTO.getStudentId()));
     }
 }
