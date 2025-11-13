@@ -5,11 +5,10 @@ import com.bastagruppen.springskolsystem.service.EnrollmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/enrollments")
@@ -21,5 +20,11 @@ public class EnrollmentController {
     @GetMapping
     public ResponseEntity<List<Enrollment>> getAll() {
         return ResponseEntity.ok(service.getAll());
+    }
+
+    @PostMapping
+    public ResponseEntity<?> enrollStudent(@RequestParam UUID studentId,
+                                           @RequestParam Long courseId){
+        return ResponseEntity.ok(service.enrollStudent(studentId,courseId));
     }
 }
