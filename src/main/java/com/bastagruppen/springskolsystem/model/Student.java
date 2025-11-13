@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import static com.bastagruppen.springskolsystem.util.RegexUtil.emailMatcher;
@@ -36,9 +38,19 @@ public final class Student {
     @Column(unique = true, nullable = false)
     String email;
 
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    private Set<Enrollment> enrollments = new HashSet<>();
+
     private static final int MAX_AGE = 125;
     private static final int MIN_NAME_LENGTH = 3;
 
+    private Student(UUID id, String name, int age, String email) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.email = email;
+        this.enrollments = new HashSet<>();
+    }
     public static Student register(final String name, final int age, final String email) {
         validateName(name);
 
