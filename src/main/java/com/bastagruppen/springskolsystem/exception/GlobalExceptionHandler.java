@@ -22,7 +22,10 @@ import java.util.Map;
 import static com.bastagruppen.springskolsystem.exception.ErrorResponse.ofError;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toMap;
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.CONFLICT;
+
 
 @Slf4j
 @RequiredArgsConstructor
