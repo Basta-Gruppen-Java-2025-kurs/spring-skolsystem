@@ -21,6 +21,7 @@ import static java.util.stream.Collectors.toUnmodifiableSet;
 public class StudentService {
 
     private final StudentRepository studentRepository;
+    private final StudentMapper studentMapper;
 
     public Student findStudentById(final UUID studentId) {
         return studentRepository.findById(studentId).orElseThrow(StudentNotFoundException::new);
@@ -33,21 +34,21 @@ public class StudentService {
     public Set<StudentDTO> findStudentsByName(String name) {
         return studentRepository.findByNameContainingIgnoreCase(name)
                 .stream()
-                .map(StudentMapper::toDTO)
+                .map(studentMapper::toDTO)
                 .collect(toUnmodifiableSet());
     }
 
     public Set<StudentDTO> findStudentsByAgeRange(int minAge, int maxAge) {
         return studentRepository.findByAgeBetween(minAge, maxAge)
                 .stream()
-                .map(StudentMapper::toDTO)
+                .map(studentMapper::toDTO)
                 .collect(toUnmodifiableSet());
     }
 
     public Set<StudentDTO> getAllStudents() {
         return studentRepository.findAll()
                 .stream()
-                .map(StudentMapper::toDTO)
+                .map(studentMapper::toDTO)
                 .collect(toUnmodifiableSet());
     }
 

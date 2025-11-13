@@ -2,6 +2,7 @@ package com.bastagruppen.springskolsystem.controller;
 
 import com.bastagruppen.springskolsystem.dto.EnrollmentRequestDTO;
 import com.bastagruppen.springskolsystem.dto.EnrollmentResponseDTO;
+import com.bastagruppen.springskolsystem.dto.StudentDTO;
 import com.bastagruppen.springskolsystem.service.EnrollmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,11 @@ public class EnrollmentController {
 
     @PostMapping
     public ResponseEntity<EnrollmentResponseDTO> enroll(@Validated @RequestBody EnrollmentRequestDTO requestDTO) {
-        return ResponseEntity.ok(service.enroll(requestDTO.getCourseId(), requestDTO.getStudentId()));
+        return ResponseEntity.ok(service.enroll(requestDTO));
+    }
+
+    @GetMapping("/course/{courseId}")
+    public ResponseEntity<List<StudentDTO>> listCourseStudents(@RequestParam Long courseId) {
+        return ResponseEntity.ok(service.listCourseStuents(courseId));
     }
 }

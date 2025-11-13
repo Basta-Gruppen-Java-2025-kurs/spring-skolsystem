@@ -1,6 +1,7 @@
 package com.bastagruppen.springskolsystem.controller;
 
 import com.bastagruppen.springskolsystem.dto.StudentDTO;
+import com.bastagruppen.springskolsystem.mapper.StudentMapper;
 import com.bastagruppen.springskolsystem.model.Student;
 import com.bastagruppen.springskolsystem.service.StudentService;
 import com.bastagruppen.springskolsystem.util.ICreate;
@@ -15,7 +16,6 @@ import java.net.URI;
 import java.util.Set;
 import java.util.UUID;
 
-import static com.bastagruppen.springskolsystem.mapper.StudentMapper.toDTO;
 import static org.springframework.http.ResponseEntity.*;
 
 @Validated
@@ -25,6 +25,7 @@ import static org.springframework.http.ResponseEntity.*;
 public class StudentController {
 
     private final StudentService studentService;
+    private final StudentMapper mapper;
 
     @GetMapping
     public ResponseEntity<Set<StudentDTO>> getAllStudents() {
@@ -35,7 +36,7 @@ public class StudentController {
     @GetMapping(params = "email")
     public ResponseEntity<StudentDTO> getStudentByEmail(@RequestParam @Email String email) {
         final Student student = studentService.findStudentByEmail(email);
-        return ok(toDTO(student));
+        return ok(mapper.toDTO(student));
     }
 
     @GetMapping("/search")
@@ -59,7 +60,7 @@ public class StudentController {
                 .buildAndExpand(student.getId())
                 .toUri();
 
-        return created(location).body(toDTO(student));
+        return created(location).body(mapper.toDTO(student));
     }
 
     @DeleteMapping("/{id}")
