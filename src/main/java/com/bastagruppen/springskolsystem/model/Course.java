@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.UUID;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -22,7 +25,9 @@ import lombok.experimental.FieldDefaults;
 
 public final class Course{
 
-    protected final UUID id = java.util.UUID.randomUUID();
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    UUID id;
 
     @NotBlank(message = "⚠️ Title is required!")
     @Size(min = 3, max = 255, message = "⚠️ Title must be 3-255 characters!")
@@ -51,7 +56,7 @@ public final class Course{
         final Integer maxStudents,
         final List<Student> enrolledStudents
     ){
-        return new Course(title, teacher, maxStudents, enrolledStudents);
+        return new Course(null, title, teacher, maxStudents, enrolledStudents);
     }
 
     public void updateTeacher(String teacher){
