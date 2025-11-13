@@ -44,6 +44,13 @@ public final class Student {
     private static final int MAX_AGE = 125;
     private static final int MIN_NAME_LENGTH = 3;
 
+    private Student(UUID id, String name, int age, String email) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.email = email;
+        this.enrollments = new HashSet<>();
+    }
     public static Student register(final String name, final int age, final String email) {
         validateName(name);
 
