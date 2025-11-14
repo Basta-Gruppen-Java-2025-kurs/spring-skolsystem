@@ -11,6 +11,8 @@ import java.util.UUID;
 
 public interface EnrollmentRepository extends JpaRepository<Enrollment, UUID> {
 
+    List<Enrollment> findByCourseId(UUID courseId);
+
     long countEnrollmentByCourseId(UUID courseId);
 
     @Query( "SELECT s " +

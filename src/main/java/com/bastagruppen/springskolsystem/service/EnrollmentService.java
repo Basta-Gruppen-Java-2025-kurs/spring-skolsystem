@@ -23,6 +23,7 @@ import java.util.UUID;
 import static com.bastagruppen.springskolsystem.mapper.EnrollmentMapper.toResponseDTO;
 import static com.bastagruppen.springskolsystem.model.Enrollment.newEnrollment;
 import static java.time.LocalDate.now;
+import static java.util.stream.Collectors.toUnmodifiableSet;
 
 @Service
 @RequiredArgsConstructor
