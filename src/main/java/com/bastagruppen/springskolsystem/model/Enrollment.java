@@ -11,6 +11,10 @@ import java.util.UUID;
 
 import static jakarta.persistence.FetchType.LAZY;
 
+@Table(
+        name = "enrollment",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"student_id", "course_id"})
+)
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor

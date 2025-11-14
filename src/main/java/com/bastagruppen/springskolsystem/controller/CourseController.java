@@ -13,5 +13,4 @@ public class CourseController {
     public CourseController(CourseService service) {
         this.service = service;
     }
-
 }

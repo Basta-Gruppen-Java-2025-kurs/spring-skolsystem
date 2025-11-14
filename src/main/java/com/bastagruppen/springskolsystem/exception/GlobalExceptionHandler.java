@@ -18,9 +18,7 @@ import java.time.Clock;
 import java.util.Map;
 
 import static com.bastagruppen.springskolsystem.exception.ErrorResponse.*;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.*;
 
 
 @Slf4j
@@ -60,5 +58,23 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException ex, HttpServletRequest request) {
         log.error(ex.getMessage(), ex);
         return ofError(ex.getMessage(), request.getRequestURI(), BAD_REQUEST, clock.instant());
+    }
+
+    @ExceptionHandler(AlreadyEnrolledException.class)
+    public ResponseEntity<Object> handleAlreadyEnrolledException(AlreadyEnrolledException ex, HttpServletRequest request) {
+        log.error(ex.getMessage(), ex);
+        return ofError(ex.getMessage(), request.getRequestURI(), CONFLICT, clock.instant());
+    }
+
+    @ExceptionHandler(CourseCapacityExceededException.class)
+    public ResponseEntity<Object> handleCourseCapacityExceededException(CourseCapacityExceededException ex, HttpServletRequest request) {
+        log.error(ex.getMessage(), ex);
+        return ofError(ex.getMessage(), request.getRequestURI(), CONFLICT, clock.instant());
+    }
+
+    @ExceptionHandler(CourseNotFoundException.class)
+    public ResponseEntity<Object> handleCourseNotFoundException(CourseNotFoundException ex, HttpServletRequest request) {
+        log.error(ex.getMessage(), ex);
+        return ofError(ex.getMessage(), request.getRequestURI(), NOT_FOUND, clock.instant());
     }
 }
