@@ -21,4 +21,8 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
             WHERE c.title = :title
             """)
     Optional<Student> findByTitle(@Param("title") String title);
+
+    Optional<Course> findCourseByTitle(final String title);
+
+    List<Course> findAllCoursesByTeacher(final String teacher);
 }
