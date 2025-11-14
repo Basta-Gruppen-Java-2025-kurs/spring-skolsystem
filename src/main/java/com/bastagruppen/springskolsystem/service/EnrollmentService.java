@@ -2,9 +2,11 @@ package com.bastagruppen.springskolsystem.service;
 
 import com.bastagruppen.springskolsystem.dto.EnrollmentRequestDTO;
 import com.bastagruppen.springskolsystem.dto.EnrollmentResponseDTO;
+import com.bastagruppen.springskolsystem.dto.StudentDTO;
 import com.bastagruppen.springskolsystem.exception.AlreadyEnrolledException;
 import com.bastagruppen.springskolsystem.exception.CourseCapacityExceededException;
 import com.bastagruppen.springskolsystem.mapper.EnrollmentMapper;
+import com.bastagruppen.springskolsystem.mapper.StudentMapper;
 import com.bastagruppen.springskolsystem.model.Course;
 import com.bastagruppen.springskolsystem.model.Enrollment;
 import com.bastagruppen.springskolsystem.model.Student;
@@ -16,10 +18,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Clock;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 import static com.bastagruppen.springskolsystem.mapper.EnrollmentMapper.toResponseDTO;
 import static com.bastagruppen.springskolsystem.model.Enrollment.newEnrollment;
 import static java.time.LocalDate.now;
+import static java.util.stream.Collectors.toUnmodifiableSet;
 
 @Service
 @RequiredArgsConstructor
@@ -65,5 +70,14 @@ public class EnrollmentService {
 
         if (enrolled >= limit)
             throw new CourseCapacityExceededException(course);
+    }
+
+    @Transactional(readOnly = true)
+    public Set<String> listStudentsByCourseId(UUID courseId) {
+        return repository.findByCourseId(courseId)
+                .stream()
+                .map(Enrollment::getStudent)
+                .map(Student::getName)
+                .collect(toUnmodifiableSet());
     }
 }

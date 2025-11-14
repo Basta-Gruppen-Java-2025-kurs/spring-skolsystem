@@ -33,4 +33,9 @@ public class EnrollmentController {
     public ResponseEntity<EnrollmentResponseDTO> enroll(@Validated @RequestBody EnrollmentRequestDTO requestDTO) {
         return ok(service.enroll(requestDTO));
     }
+
+    @GetMapping("/course/{courseId}")
+    public ResponseEntity<Set<String>> listCourseStudents(@PathVariable UUID courseId) {
+        return ok(service.listStudentsByCourseId(courseId));
+    }
 }
