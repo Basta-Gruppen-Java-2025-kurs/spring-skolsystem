@@ -6,27 +6,40 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Date;
+import java.time.LocalDate;
+import java.util.UUID;
+
+import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
-@Table(name = "entities")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 public class Enrollment {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
 
-    @ManyToOne
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    UUID id;
+
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "student_id", nullable = false)
     Student student;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "course_id", nullable = false)
     Course course;
 
     @Column(nullable = false)
-    Date date;
+    Integer grade;
+
+    @Column(nullable = false)
+    LocalDate date;
+
+    public static Enrollment newEnrollment(final Student student,
+                                           final Course course,
+                                           final Integer grade,
+                                           final LocalDate date) {
+        return new Enrollment(null, student, course, grade, date);
+    }
 }

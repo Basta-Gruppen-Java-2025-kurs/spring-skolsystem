@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/course")
 public class CourseController {
+
     private final CourseService service;
 
     public CourseController(CourseService service) {
         this.service = service;
     }
-
 
 }

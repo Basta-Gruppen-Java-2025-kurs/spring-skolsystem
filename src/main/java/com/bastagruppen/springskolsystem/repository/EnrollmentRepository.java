@@ -7,12 +7,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
-public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
+public interface EnrollmentRepository extends JpaRepository<Enrollment, UUID> {
 
-    List<Student> findStudentsByCourseId(Long courseId);
+    List<Enrollment> findByCourseId(UUID courseId);
+
     Optional<Enrollment> findByStudentAndCourse(Student student, Course course);
-
-
-
 }
