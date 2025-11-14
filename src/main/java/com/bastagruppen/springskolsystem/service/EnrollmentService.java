@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Clock;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import static com.bastagruppen.springskolsystem.mapper.EnrollmentMapper.toResponseDTO;
@@ -72,12 +71,7 @@ public class EnrollmentService {
             throw new CourseCapacityExceededException(course);
     }
 
-    @Transactional(readOnly = true)
-    public Set<String> listStudentsByCourseId(UUID courseId) {
-        return repository.findByCourseId(courseId)
-                .stream()
-                .map(Enrollment::getStudent)
-                .map(Student::getName)
-                .collect(toUnmodifiableSet());
+    public List<StudentDTO> listStudentsByCourseId(UUID courseId) {
+        return repository.findStudentsByCourseId(courseId).stream().map(StudentMapper::toDTO).toList();
     }
 }
