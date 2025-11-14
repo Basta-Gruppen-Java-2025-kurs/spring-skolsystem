@@ -1,62 +1,43 @@
 package com.bastagruppen.springskolsystem.model;
 
-import java.util.List;
-import java.util.UUID;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.PositiveOrZero;
-import jakarta.validation.constraints.Size;
-import static lombok.AccessLevel.PRIVATE;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.FieldDefaults;
+
+import java.util.*;
+
+import static jakarta.persistence.CascadeType.ALL;
+import static lombok.AccessLevel.PUBLIC;
 
 @Getter
 @Setter
-@FieldDefaults(level = PRIVATE)
-@AllArgsConstructor(access = PRIVATE)
+@AllArgsConstructor(access = PUBLIC)
+@NoArgsConstructor(access = PUBLIC)
 @Entity
-
-public final class Course{
+public class Course {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    UUID id;
+    private UUID id;
 
-    @NotBlank(message = "⚠️ Title is required!")
-    @Size(min = 3, max = 255, message = "⚠️ Title must be 3-255 characters!")
-    final String title;
+    @Column(unique = true, nullable = false)
+    private String title;
 
-    @NotBlank(message = "⚠️ A teacher (String) must be provided for the course!")
-    @Size(min = 2, max = 120, message = "⚠️ Teacher's name must be between 2-120 characters!")
-    String teacher;
+    @Column(nullable = false)
+    private String teacher;
 
-    @PositiveOrZero(message = "Max Students cannot be negative... you donkey! 🫏")
-    @Max(value = 255, message = "Can only enroll a maximum of 255 students!")
-    Integer maxStudents;
+    @Column(nullable = false)
+    private Integer maxStudents;
 
-    // TODO - Add lombok validation constraints!
-    final List<Student> enrolledStudents;
+    @OneToMany(mappedBy = "course", cascade = ALL, orphanRemoval = true)
+    private final Set<Enrollment> enrollments = new HashSet<>();
 
-    public UUID getId(){return id;}
-    public String getTitle(){return title;}
-    public String getTeacher(){return teacher;}
-    public Integer getMaxStudents(){return maxStudents;}
-    public List<Student> getEnrolledStudents(){return enrolledStudents;}
-    
-    public static Course create(
-        final String title,
-        final String teacher,
-        final Integer maxStudents,
-        final List<Student> enrolledStudents
-    ){
-        return new Course(null, title, teacher, maxStudents, enrolledStudents);
+    private final List<Student> enrolledStudents = new ArrayList<>();
+
+    public static Course create(String title, String teacher, int maxStudents) {
+        return new Course(null, title, teacher, maxStudents);
     }
 
     public void updateTeacher(String teacher){

@@ -4,6 +4,9 @@ import com.bastagruppen.springskolsystem.dto.StudentDTO;
 import com.bastagruppen.springskolsystem.model.Student;
 import com.bastagruppen.springskolsystem.service.StudentService;
 import com.bastagruppen.springskolsystem.util.ICreate;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.Set;
+import java.util.Collection;
 import java.util.UUID;
 
 import static com.bastagruppen.springskolsystem.mapper.StudentMapper.toDTO;
@@ -26,29 +29,35 @@ public class StudentController {
 
     private final StudentService studentService;
 
-    @GetMapping
-    public ResponseEntity<Set<StudentDTO>> getAllStudents() {
-        final Set<StudentDTO> allStudents = studentService.getAllStudents();
-        return ok(allStudents);
-    }
-
     @GetMapping(params = "email")
-    public ResponseEntity<StudentDTO> getStudentByEmail(@RequestParam @Email String email) {
+    public ResponseEntity<StudentDTO> findStudentByEmail(@RequestParam @Email String email) {
         final Student student = studentService.findStudentByEmail(email);
         return ok(toDTO(student));
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<Set<StudentDTO>> getStudentsByName(@RequestParam String name) {
-        Set<StudentDTO> students = studentService.findStudentsByName(name);
-        return ResponseEntity.ok(students);
+    @GetMapping
+    public ResponseEntity<Collection<StudentDTO>> findStudents(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Integer ageAfter,
+            @RequestParam(required = false) Integer minAge,
+            @RequestParam(required = false) Integer maxAge) {
+
+        if (name != null)
+            return ok(studentService.findStudentsByNameSorted(name));
+
+        if (ageAfter != null)
+            return ok(studentService.findByAgeAfterSorted(ageAfter));
+
+        if (minAge != null && maxAge != null)
+            return ok(studentService.findStudentsByAgeRange(minAge, maxAge));
+
+        return ok(studentService.findAllStudents());
     }
 
-    @GetMapping("/filter")
-    public ResponseEntity<Set<StudentDTO>> getStudentsByAgeRange(@RequestParam int minAge,
-                                                                 @RequestParam int maxAge) {
-        Set<StudentDTO> students = studentService.findStudentsByAgeRange(minAge, maxAge);
-        return ResponseEntity.ok(students);
+    @GetMapping("/count")
+    public ResponseEntity<Long> getStudentCount() {
+        long count = studentService.getNumberOfRegisteredStudents();
+        return ok(count);
     }
 
     @PostMapping
@@ -60,6 +69,12 @@ public class StudentController {
                 .toUri();
 
         return created(location).body(toDTO(student));
+    }
+
+    @PatchMapping("/{id}")
+    public Student patchManager(@PathVariable UUID id, @RequestBody JsonPatch jsonPatch)
+            throws JsonPatchException, JsonProcessingException {
+        return studentService.patch(id, jsonPatch);
     }
 
     @DeleteMapping("/{id}")

@@ -33,6 +33,8 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/courses")
 public class CourseController {
+
+    private final CourseService service;
     private final CourseService courseService;
 
     //1️⃣ GET - Fetch all courses
@@ -64,7 +66,7 @@ public class CourseController {
             .path("/{id}")
             .buildAndExpand(course.getId())
             .toUri();
-        
+
             return created(uriLocation).body(toDTO(course));
 
     }

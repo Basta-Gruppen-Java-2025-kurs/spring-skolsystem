@@ -15,3 +15,7 @@ spring:
       hibernate:
         jdbc:
           time_zone: UTC
+      hibernate.connection.useUnicode: true
+      hibernate.connection.characterEncoding: utf8
+      hibernate.connection.collation: utf8mb4_swedish_ci
+      hibernate.connection.charSet: utf8mb4
