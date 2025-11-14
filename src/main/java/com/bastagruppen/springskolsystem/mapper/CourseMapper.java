@@ -19,18 +19,16 @@ public final class CourseMapper {
         .title(course.getTitle())
         .teacher(course.getTeacher())
         .maxStudents(course.getMaxStudents())
-        .enrolledStudents(course.getEnrolledStudents())
         .build();
     }
 
-    public static Course fromDTO(CourseDTO dtoCourse){
-        if(dtoCourse == null){return null;}
+    public static Course fromDTO(CourseDTO courseDto){
+        if(courseDto == null){return null;}
 
         return Course.create(
-            dtoCourse.title(),
-            dtoCourse.teacher(),
-            dtoCourse.maxStudents(),
-            dtoCourse.enrolledStudents()
+            courseDto.title(),
+            courseDto.teacher(),
+            courseDto.maxStudents()
         );
     }
 }

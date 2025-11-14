@@ -1,5 +1,23 @@
 package com.bastagruppen.springskolsystem.model;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import com.bastagruppen.springskolsystem.dto.StudentDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Size;
+import lombok.AccessLevel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,8 +51,25 @@ public class Course {
 
     @OneToMany(mappedBy = "course", cascade = ALL, orphanRemoval = true)
     private final Set<Enrollment> enrollments = new HashSet<>();
-
+    // TODO - Add lombok validation constraints!
+    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL)
+    @JsonIgnore
     private final List<Student> enrolledStudents = new ArrayList<>();
+
+    protected Course(String title, String teacher, Integer maxStudents){
+        this.title = title;
+        this.teacher = teacher;
+        this.maxStudents = maxStudents;
+    };
+
+    public static Course create(
+        final String title,
+        final String teacher,
+        final Integer maxStudents
+    ) {
+        return new Course(title, teacher, maxStudents, new ArrayList<>());
+    }
+
 
     public static Course create(String title, String teacher, int maxStudents) {
         return new Course(null, title, teacher, maxStudents);
@@ -56,17 +91,17 @@ public class Course {
         this.maxStudents = maxStudents;
     }
 
-    public void removeStudent(Student student){
-        if(student == null){
+    public void removeStudent(StudentDTO studentDto){
+        if(studentDto == null){
             throw new IllegalArgumentException("Student cannot be null ... duh! 🙄");
         }
-        this.enrolledStudents.removeIf(s -> s.getId().equals(student.getId()));
+        this.enrolledStudents.removeIf(s -> s.getId().equals(studentDto.id()));
     }
 
-    public void enrollStudent(Student student){
-        if(student == null){
+    public void enrollStudent(StudentDTO studentDto){
+        if(studentDto == null){
             throw new IllegalArgumentException("Student cannot be null ... duh! 🙄");
         }
-        this.enrolledStudents.add(student);
+        this.enrolledStudents.add(Student.register(studentDto.name(), studentDto.age(), studentDto.email()));
     }
 }

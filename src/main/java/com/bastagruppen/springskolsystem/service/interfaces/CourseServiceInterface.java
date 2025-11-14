@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.UUID;
 
 import com.bastagruppen.springskolsystem.dto.CourseDTO;
+import com.bastagruppen.springskolsystem.dto.StudentDTO;
 import com.bastagruppen.springskolsystem.model.Course;
-import com.bastagruppen.springskolsystem.model.Student;
 
 
 public interface CourseServiceInterface {
@@ -16,7 +16,7 @@ public interface CourseServiceInterface {
     Course deleteCourse(UUID id);
     Course updateTeacher(UUID id, String teacher);
     Course updateMaxStudents(UUID id, Integer newMax);
-    Course enrollStudent(UUID id, Student student);
-    Course removeStudent(UUID id, Student student);
+    Course enrollStudent(UUID id, StudentDTO student);
+    Course removeStudent(UUID id, StudentDTO student);
     
 }
