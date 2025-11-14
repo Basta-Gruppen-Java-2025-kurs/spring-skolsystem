@@ -4,14 +4,12 @@ import com.bastagruppen.springskolsystem.dto.EnrollmentRequestDTO;
 import com.bastagruppen.springskolsystem.dto.EnrollmentResponseDTO;
 import com.bastagruppen.springskolsystem.dto.StudentDTO;
 import com.bastagruppen.springskolsystem.service.EnrollmentService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import static org.springframework.http.ResponseEntity.ok;
@@ -32,5 +30,10 @@ public class EnrollmentController {
     @PostMapping
     public ResponseEntity<EnrollmentResponseDTO> enroll(@Validated @RequestBody EnrollmentRequestDTO requestDTO) {
         return ok(service.enroll(requestDTO));
+    }
+
+    @GetMapping("/course/{courseId}")
+    public ResponseEntity<List<StudentDTO>> listCourseStudents(@PathVariable UUID courseId) {
+        return ok(service.listStudentsByCourseId(courseId));
     }
 }

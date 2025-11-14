@@ -2,9 +2,11 @@ package com.bastagruppen.springskolsystem.service;
 
 import com.bastagruppen.springskolsystem.dto.EnrollmentRequestDTO;
 import com.bastagruppen.springskolsystem.dto.EnrollmentResponseDTO;
+import com.bastagruppen.springskolsystem.dto.StudentDTO;
 import com.bastagruppen.springskolsystem.exception.AlreadyEnrolledException;
 import com.bastagruppen.springskolsystem.exception.CourseCapacityExceededException;
 import com.bastagruppen.springskolsystem.mapper.EnrollmentMapper;
+import com.bastagruppen.springskolsystem.mapper.StudentMapper;
 import com.bastagruppen.springskolsystem.model.Course;
 import com.bastagruppen.springskolsystem.model.Enrollment;
 import com.bastagruppen.springskolsystem.model.Student;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Clock;
 import java.util.List;
+import java.util.UUID;
 
 import static com.bastagruppen.springskolsystem.mapper.EnrollmentMapper.toResponseDTO;
 import static com.bastagruppen.springskolsystem.model.Enrollment.newEnrollment;
@@ -65,5 +68,9 @@ public class EnrollmentService {
 
         if (enrolled >= limit)
             throw new CourseCapacityExceededException(course);
+    }
+
+    public List<StudentDTO> listStudentsByCourseId(UUID courseId) {
+        return repository.findStudentsByCourseId(courseId).stream().map(StudentMapper::toDTO).toList();
     }
 }
