@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import static com.bastagruppen.springskolsystem.util.RegexUtil.emailMatcher;
+import static jakarta.persistence.CascadeType.ALL;
 import static java.lang.String.format;
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
@@ -21,45 +22,40 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @FieldDefaults(level = PRIVATE)
 @NoArgsConstructor(access = PROTECTED)
-@AllArgsConstructor(access = PRIVATE)
-public final class Student {
+@AllArgsConstructor
+public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     UUID id;
 
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false)
     String name;
 
     @Column(nullable = false)
     int age;
 
-    // TODO: Should maybe be 'updatable = false'?
     @Column(unique = true, nullable = false)
     String email;
 
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "student", cascade = ALL, orphanRemoval = true)
     private Set<Enrollment> enrollments = new HashSet<>();
 
     private static final int MAX_AGE = 125;
     private static final int MIN_NAME_LENGTH = 3;
 
-    private Student(UUID id, String name, int age, String email) {
-        this.id = id;
+    private Student(String name, int age, String email) {
         this.name = name;
         this.age = age;
         this.email = email;
-        this.enrollments = new HashSet<>();
     }
+
     public static Student register(final String name, final int age, final String email) {
         validateName(name);
+        validateAge(age);
+        validateEmail(email);
 
-        if (age < 0 || age > MAX_AGE)
-            throw new IllegalArgumentException(format("Age must be between 0 and %d", MAX_AGE));
-
-//        validateEmail(email);
-
-        return new Student(null, name, age, email);
+        return new Student(name, age, email);
     }
 
     public void updateName(String name) {
@@ -68,7 +64,7 @@ public final class Student {
     }
 
     public void updateEmail(String email) {
-//        validateEmail(email);
+        validateEmail(email);
         this.email = email;
     }
 
@@ -76,6 +72,11 @@ public final class Student {
         if (name == null || name.isBlank() || name.length() < MIN_NAME_LENGTH)
             throw new IllegalArgumentException(
                     format("Name must be at least %d characters long and not blank", MIN_NAME_LENGTH));
+    }
+
+    private static void validateAge(final int age) {
+        if (age < 0 || age > MAX_AGE)
+            throw new IllegalArgumentException(format("Age must be between 0 and %d", MAX_AGE));
     }
 
     private static void validateEmail(final String email) {

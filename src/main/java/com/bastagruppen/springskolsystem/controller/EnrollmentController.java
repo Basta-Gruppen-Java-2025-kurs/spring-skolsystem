@@ -10,26 +10,31 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+
+import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/api/enrollments")
 @Validated
 @RequiredArgsConstructor
 public class EnrollmentController {
+
     private final EnrollmentService service;
 
     @GetMapping
     public ResponseEntity<List<EnrollmentResponseDTO>> getAll() {
-        return ResponseEntity.ok(service.getAll());
+        return ok(service.getAll());
     }
 
     @PostMapping
     public ResponseEntity<EnrollmentResponseDTO> enroll(@Validated @RequestBody EnrollmentRequestDTO requestDTO) {
-        return ResponseEntity.ok(service.enroll(requestDTO));
+        return ok(service.enroll(requestDTO));
     }
 
     @GetMapping("/course/{courseId}")
-    public ResponseEntity<List<StudentDTO>> listCourseStudents(@RequestParam Long courseId) {
-        return ResponseEntity.ok(service.listCourseStuents(courseId));
+    public ResponseEntity<Set<StudentDTO>> listCourseStudents(@PathVariable UUID courseId) {
+        return ok(service.listStudentsByCourseId(courseId));
     }
 }

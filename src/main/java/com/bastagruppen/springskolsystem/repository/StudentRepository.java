@@ -14,11 +14,38 @@ import java.util.UUID;
 @Repository
 public interface StudentRepository extends JpaRepository<Student, UUID> {
 
-    Optional<Student> findByEmail(String email);
+    @Query("""
+            SELECT s
+            FROM Student s
+            LEFT JOIN FETCH s.enrollments
+            WHERE s.email = :email
+            """)
+    Optional<Student> findByEmail(@Param("email") String email);
 
-    List<Student> findByNameContainingIgnoreCase(String name);
+    @Query("""
+            SELECT DISTINCT s
+            FROM Student s
+            LEFT JOIN FETCH s.enrollments e
+            LEFT JOIN FETCH e.course
+            WHERE LOWER(s.name) LIKE LOWER(CONCAT('%', :name,'%') )
+            ORDER BY s.name
+            """)
+    List<Student> findByNameContainingIgnoreCaseSortedByName(@Param("name") String name);
 
     List<Student> findByAgeBetween(int minAge, int maxAge);
+
+    @Query("""
+            SELECT DISTINCT s
+            FROM Student s
+            LEFT JOIN FETCH s.enrollments e
+            LEFT JOIN FETCH e.course
+            WHERE s.age > :ageAfter
+            ORDER BY s.age
+            """)
+    List<Student> findByAgeAfterSortedByAge(@Param("ageAfter") int ageAfter);
+
+    @Query("SELECT COUNT(s) FROM Student s")
+    long getNumberOfRegisteredStudents();
 
     @Modifying
     @Query("""

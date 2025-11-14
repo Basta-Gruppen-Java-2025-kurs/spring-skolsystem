@@ -2,9 +2,11 @@ package com.bastagruppen.springskolsystem.dto;
 
 import com.bastagruppen.springskolsystem.util.ICreate;
 import com.bastagruppen.springskolsystem.util.IUpdate;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
 
+import java.util.List;
 import java.util.UUID;
 
 @Builder
@@ -19,21 +21,11 @@ public record StudentDTO(
 
         @PositiveOrZero(message = "Age cannot be negative")
         @Max(value = 125, message = "Age cannot be greater than 125")
-        int age,
+        Integer age,
 
         @NotBlank(message = "Email is required")
         @Email(message = "Email is not valid")
-        String email) {
+        String email,
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof StudentDTO other)) return false;
-        return ((id != null) && (id.equals(other.id)));
-    }
-
-    @Override
-    public int hashCode() {
-        return ((id != null) ? id.hashCode() : 0);
-    }
+        List<@Valid StudentEnrollmentSummaryDTO> courses) {
 }
