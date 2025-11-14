@@ -38,11 +38,11 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
         // --- Students ---
         var alice = studentService.registerStudent(
-                new StudentDTO(null, "Bob Are", 22, "alice@lexicon.com", null));
+                new StudentDTO(null, "Alice Ginger", 22, "alice@lexicon.com", null));
         var bob = studentService.registerStudent(
-                new StudentDTO(null, "Bob Öre", 24, "bob@lexicon.com", null));
+                new StudentDTO(null, "Bob Doe", 24, "bob@lexicon.com", null));
         var bobby = studentService.registerStudent(
-                new StudentDTO(null, "Bob Hare", 45, "bobby@lexicon.com", null));
+                new StudentDTO(null, "Bobby Junior", 45, "bobby@lexicon.com", null));
         var charlie = studentService.registerStudent(
                 new StudentDTO(null, "Charlie Brown", 21, "charlie@lexicon.com", null));
 
@@ -52,7 +52,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         var programming = courseService.createCourse(
                 new CourseRequestDTO("Programming", "Olle Nilsson", 25));
         var history = courseService.createCourse(
-                new CourseRequestDTO("History", "Anders Svensson", 40));
+                new CourseRequestDTO("History", "Anders Svensson", 4));
 
         // --- Enrollments ---
         // Bob: Math + Programming + History

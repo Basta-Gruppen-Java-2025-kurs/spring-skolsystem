@@ -3,6 +3,8 @@ package com.bastagruppen.springskolsystem.service;
 import com.bastagruppen.springskolsystem.dto.EnrollmentRequestDTO;
 import com.bastagruppen.springskolsystem.dto.EnrollmentResponseDTO;
 import com.bastagruppen.springskolsystem.dto.StudentDTO;
+import com.bastagruppen.springskolsystem.exception.AlreadyEnrolledException;
+import com.bastagruppen.springskolsystem.exception.CourseCapacityExceededException;
 import com.bastagruppen.springskolsystem.mapper.EnrollmentMapper;
 import com.bastagruppen.springskolsystem.mapper.StudentMapper;
 import com.bastagruppen.springskolsystem.model.Course;
@@ -10,11 +12,11 @@ import com.bastagruppen.springskolsystem.model.Enrollment;
 import com.bastagruppen.springskolsystem.model.Student;
 import com.bastagruppen.springskolsystem.repository.EnrollmentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Clock;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -44,17 +46,38 @@ public class EnrollmentService {
     public EnrollmentResponseDTO enroll(EnrollmentRequestDTO requestDTO) {
         final Course course = courseService.findById(requestDTO.courseId());
         final Student student = studentService.findStudentById(requestDTO.studentId());
-        final LocalDate date = ((requestDTO.date() != null) ? requestDTO.date() : now(clock));
 
-        return toResponseDTO(repository.save(newEnrollment(student, course, requestDTO.grade(), date)));
+        try {
+            checkCourseCapacity(course);
+
+            final Enrollment enrollment = newEnrollment(
+                    student,
+                    course,
+                    requestDTO.grade(),
+                    requestDTO.date() != null ? requestDTO.date() : now(clock)
+            );
+            final Enrollment saved = repository.saveAndFlush(enrollment);
+
+            return toResponseDTO(saved);
+        } catch (DataIntegrityViolationException ex) {
+            throw new AlreadyEnrolledException(course.getTitle(), student.getName());
+        }
+    }
+
+    private void checkCourseCapacity(Course course) {
+        final long enrolled = repository.countEnrollmentByCourseId(course.getId());
+        final int limit = course.getMaxStudents();
+
+        if (enrolled >= limit)
+            throw new CourseCapacityExceededException(course);
     }
 
     @Transactional(readOnly = true)
-    public Set<StudentDTO> listStudentsByCourseId(UUID courseId) {
+    public Set<String> listStudentsByCourseId(UUID courseId) {
         return repository.findByCourseId(courseId)
                 .stream()
                 .map(Enrollment::getStudent)
-                .map(StudentMapper::toDTO)
+                .map(Student::getName)
                 .collect(toUnmodifiableSet());
     }
 }

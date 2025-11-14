@@ -2,12 +2,15 @@ package com.bastagruppen.springskolsystem.dto;
 
 import com.bastagruppen.springskolsystem.util.ICreate;
 import com.bastagruppen.springskolsystem.util.IUpdate;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
 
 import java.util.List;
 import java.util.UUID;
+
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
 @Builder
 public record StudentDTO(
@@ -27,5 +30,6 @@ public record StudentDTO(
         @Email(message = "Email is not valid")
         String email,
 
+        @JsonInclude(NON_EMPTY)
         List<@Valid StudentEnrollmentSummaryDTO> courses) {
 }

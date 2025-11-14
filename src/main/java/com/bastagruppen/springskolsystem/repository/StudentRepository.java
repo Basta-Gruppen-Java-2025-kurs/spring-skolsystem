@@ -17,7 +17,8 @@ public interface StudentRepository extends JpaRepository<Student, UUID> {
     @Query("""
             SELECT s
             FROM Student s
-            LEFT JOIN FETCH s.enrollments
+            LEFT JOIN FETCH s.enrollments e
+            LEFT JOIN FETCH e.course
             WHERE s.email = :email
             """)
     Optional<Student> findByEmail(@Param("email") String email);
